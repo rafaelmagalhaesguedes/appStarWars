@@ -1,13 +1,22 @@
 import React from 'react';
-import { PlanetType } from '../../types';
+import { State } from '../../types';
 
-type TableProps = {
-  planets: PlanetType[];
-};
+class Table extends React.Component {
+  state: State = {
+    planets: [],
+  };
 
-class Table extends React.Component<TableProps> {
+  async componentDidMount() {
+    const urlAPI = 'https://swapi.dev/api/planets';
+
+    const response = await fetch(urlAPI);
+    const data = await response.json();
+
+    this.setState({ planets: data.results });
+  }
+
   render() {
-    const { planets } = this.props;
+    const { planets } = this.state;
     return (
       <table>
         <thead>
@@ -39,7 +48,7 @@ class Table extends React.Component<TableProps> {
               <td>{ planet.terrain }</td>
               <td>{ planet.surface_water }</td>
               <td>{ planet.population }</td>
-              <td>{ planet.films }</td>
+              <td>{ planet.films.join(' ') }</td>
               <td>{ planet.created }</td>
               <td>{ planet.edited }</td>
               <td>{ planet.url }</td>
