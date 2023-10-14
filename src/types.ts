@@ -16,4 +16,5 @@ export type PlanetType = {
 
 export type State = {
   planets: PlanetType[],
+  search: string,
 };
