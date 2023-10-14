@@ -15,7 +15,6 @@ class App extends React.Component {
     const data = await response.json();
 
     this.setState({ planets: data.results });
-    console.log(data.results);
   }
 
   render() {
