@@ -1,16 +1,8 @@
-import React, { useState, useContext } from 'react';
+import { useContext } from 'react';
 import { PlanetContext } from '../../context/planet-context';
 
 function Table() {
-  const { planets } = useContext(PlanetContext);
-  const [search, setSearch] = useState('');
-
-  const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(event.target.value);
-  };
-
-  const filterPlanets = planets
-    .filter((planet) => planet.name.toLowerCase().includes(search.toLowerCase()));
+  const { planets, search, handleChange, filterPlanets } = useContext(PlanetContext);
 
   const isFilterEmpty = search === '';
 
@@ -21,7 +13,7 @@ function Table() {
         type="text"
         id="name"
         value={ search }
-        onChange={ handleFilterChange }
+        onChange={ ({ target }) => handleChange(target.value) }
       />
       <table>
         <thead>
