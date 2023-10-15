@@ -1,22 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { PlanetType } from '../../types';
+import React, { useState, useContext } from 'react';
+import { PlanetContext } from '../../context/planet-context';
 
 function Table() {
-  const [planets, setPlanets] = useState<PlanetType[]>([]);
+  const { planets } = useContext(PlanetContext);
   const [search, setSearch] = useState('');
-
-  useEffect(() => {
-    async function fetchApi() {
-      const urlAPI = 'https://swapi.dev/api/planets';
-
-      const response = await fetch(urlAPI);
-      const data = await response.json();
-
-      setPlanets(data.results);
-    }
-
-    fetchApi();
-  }, []);
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
