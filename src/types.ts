@@ -16,7 +16,7 @@ export type PlanetType = {
 
 export type PlanetContextType = {
   planets: PlanetType[],
-  search: string,
+  search: string
   filterPlanets: PlanetType[],
-  handleChange: (term: string) => void;
+  handleSearch: (term: string) => void;
 };
