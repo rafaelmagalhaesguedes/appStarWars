@@ -13,8 +13,3 @@ export type PlanetType = {
   terrain: string,
   url: string,
 };
-
-export type State = {
-  planets: PlanetType[],
-  search: string,
-};
