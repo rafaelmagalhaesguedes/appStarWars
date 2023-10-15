@@ -29,8 +29,10 @@ function PlanetProvider({ children } : PlanetContextProps) {
     fetchApi();
   }, []);
 
+  const contextValues = { planets, search, handleChange, filterPlanets };
+
   return (
-    <PlanetContext.Provider value={ { planets, search, handleChange, filterPlanets } }>
+    <PlanetContext.Provider value={ contextValues }>
       {children}
     </PlanetContext.Provider>
   );
