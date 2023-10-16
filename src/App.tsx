@@ -5,12 +5,12 @@ import Table from './components/Table/Table';
 
 function App() {
   return (
-    <>
+    <div className="container">
       <div>Hello, App!</div>
       <SearchForm />
       <FilterForm />
       <Table />
-    </>
+    </div>
   );
 }
 
