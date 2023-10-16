@@ -11,8 +11,8 @@ function PlanetProvider({ children } : PlanetContextProps) {
   const [search, setSearch] = useState('');
   const [filterPlanets, setFilterPlanets] = useState<PlanetType[]>([]);
 
-  const handleSearch = (term: string) => {
-    setSearch(term);
+  const handleSearch = (searchTerm: string) => {
+    setSearch(searchTerm);
   };
 
   const handleFilterSearch = useCallback(() => {
