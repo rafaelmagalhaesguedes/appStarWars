@@ -4,7 +4,7 @@ import { PlanetContext } from '../../context/planet-context';
 function Table() {
   const { planets, filterPlanets } = useContext(PlanetContext);
 
-  const isFilterEmpty = filterPlanets.length === 0;
+  const isFilterEmpty = filterPlanets && filterPlanets.length === 0;
 
   return (
     <table>
@@ -27,7 +27,7 @@ function Table() {
       </thead>
       <tbody>
         {isFilterEmpty
-          ? planets.map((planet) => (
+          ? planets && planets.map((planet) => (
             <tr key={ planet.edited }>
               <td>{planet.name}</td>
               <td>{planet.rotation_period}</td>
@@ -44,7 +44,7 @@ function Table() {
               <td>{planet.url}</td>
             </tr>
           ))
-          : filterPlanets.map((planet) => (
+          : filterPlanets && filterPlanets.map((planet) => (
             <tr key={ planet.edited }>
               <td>{planet.name}</td>
               <td>{planet.rotation_period}</td>
