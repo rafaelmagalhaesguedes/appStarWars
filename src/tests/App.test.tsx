@@ -41,3 +41,23 @@ describe('Tests component FilterForm', () => {
     expect(screen.getByTestId('value-filter')).toHaveValue(100);
   });
 });
+
+describe('Tests component Table', () => {
+  it('Verifica se o header da tabela é renderizado', () => {
+    render(<Table />);
+
+    expect(screen.getByText('Name')).toBeInTheDocument();
+    expect(screen.getByText('Rotation')).toBeInTheDocument();
+    expect(screen.getByText('Orbital Period')).toBeInTheDocument();
+    expect(screen.getByText('Diameter')).toBeInTheDocument();
+    expect(screen.getByText('Climate')).toBeInTheDocument();
+    expect(screen.getByText('Gravity')).toBeInTheDocument();
+    expect(screen.getByText('Terrain')).toBeInTheDocument();
+    expect(screen.getByText('Surface Water')).toBeInTheDocument();
+    expect(screen.getByText('Population')).toBeInTheDocument();
+    expect(screen.getByText('Films')).toBeInTheDocument();
+    expect(screen.getByText('Created')).toBeInTheDocument();
+    expect(screen.getByText('Edited')).toBeInTheDocument();
+    expect(screen.getByText('URL')).toBeInTheDocument();
+  });
+});
