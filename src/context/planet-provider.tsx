@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { PlanetContext } from './planet-context';
 import { PlanetType } from '../types';
 
@@ -15,17 +15,17 @@ function PlanetProvider({ children } : PlanetContextProps) {
     setSearch(term);
   };
 
-  const handleFilterSearch = () => {
+  const handleFilterSearch = useCallback(() => {
     const filter = planets
       .filter((planet) => planet.name.toLowerCase().includes(search.toLowerCase()));
     if (filter) {
       setFilterPlanets(filter);
     }
-  };
+  }, [planets, search]);
 
   useEffect(() => {
     handleFilterSearch();
-  }, [search]);
+  }, [handleFilterSearch]);
 
   useEffect(() => {
     async function fetchApi() {
