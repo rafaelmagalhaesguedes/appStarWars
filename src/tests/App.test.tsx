@@ -1,9 +1,11 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import App from '../App';
+import { render, screen, fireEvent } from '@testing-library/react';
+import SearchForm from '../components/SearchForm/SearchForm';
 
-test('I am your test', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/Hello, App!/i);
-  expect(linkElement).toBeInTheDocument();
+describe('Tests component SearchForm', () => {  
+  test('Verifica se o input de pesquisa é renderizado', () => {
+    render(<SearchForm />);
+    const textInput = screen.getByTestId('name-filter');
+    expect(textInput).toBeInTheDocument();
+  });
 });
+
