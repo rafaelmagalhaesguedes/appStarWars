@@ -1,4 +1,5 @@
 export type PlanetType = {
+  [key: string]: any
   name: string,
   climate: string,
   created: string,
@@ -14,9 +15,16 @@ export type PlanetType = {
   url: string,
 };
 
+export type FilterType = {
+  column: string,
+  comparison: string,
+  value: number,
+};
+
 export type PlanetContextType = {
   planets: PlanetType[],
   search: string
   filterPlanets: PlanetType[],
   handleSearch: (term: string) => void;
+  handleFilterChange: any;
 };
