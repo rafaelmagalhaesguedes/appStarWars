@@ -1,11 +1,17 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { PlanetContext } from '../../context/planet-context';
-import { FilterType } from '../../types';
+
+const columns = [
+  'population',
+  'orbital_period',
+  'diameter',
+  'rotation_period',
+  'surface_water',
+];
 
 function FilterForm() {
-  const { handleFilterChange } = useContext(PlanetContext);
-
-  const [formData, setFormData] = useState<FilterType>({
+  const { handleFilterChange, filterConfig } = useContext(PlanetContext);
+  const [formData, setFormData] = useState({
     column: 'population',
     comparison: 'maior que',
     value: 0,
@@ -23,6 +29,18 @@ function FilterForm() {
     handleFilterChange(formData);
   };
 
+  useEffect(() => {
+    const columnFilters = columns
+      .filter((column) => !filterConfig
+        .some((filter) => filter.column === column));
+
+    setFormData({
+      column: columnFilters[0],
+      comparison: 'maior que',
+      value: 0,
+    });
+  }, [filterConfig]);
+
   return (
     <div>
       <select
@@ -31,11 +49,13 @@ function FilterForm() {
         value={ formData.column }
         onChange={ handleChange }
       >
-        <option value="population">population</option>
-        <option value="orbital_period">orbital_period</option>
-        <option value="diameter">diameter</option>
-        <option value="rotation_period">rotation_period</option>
-        <option value="surface_water">surface_water</option>
+        {columns.filter((column) => !filterConfig
+          .some((filter) => filter.column === column))
+          .map((column) => (
+            <option key={ column } value={ column }>
+              {column}
+            </option>
+          ))}
       </select>
 
       <select
@@ -56,7 +76,6 @@ function FilterForm() {
         value={ formData.value }
         onChange={ handleChange }
       />
-
       <button data-testid="button-filter" onClick={ handleFilter }>
         Filtrar
       </button>
