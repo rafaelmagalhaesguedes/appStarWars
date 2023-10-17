@@ -30,12 +30,8 @@ function FilterForm() {
   };
 
   useEffect(() => {
-    const columnFilters = columns
-      .filter((column) => !filterConfig
-        .some((filter) => filter.column === column));
-
     setFormData({
-      column: columnFilters[0],
+      column: columns[0],
       comparison: 'maior que',
       value: 0,
     });
