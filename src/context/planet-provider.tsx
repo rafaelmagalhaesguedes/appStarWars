@@ -9,7 +9,7 @@ type PlanetContextProps = {
 function PlanetProvider({ children }: PlanetContextProps) {
   const [planets, setPlanets] = useState<PlanetType[]>([]);
   const [search, setSearch] = useState('');
-  const [filterPlanets, setFilterPlanets] = useState<PlanetType[]>(planets);
+  const [filterPlanets, setFilterPlanets] = useState<PlanetType[]>([]);
   const [filterConfig, setFilterConfig] = useState<FilterType[]>([]);
 
   // Carrega o termo de pesquisa
@@ -35,33 +35,33 @@ function PlanetProvider({ children }: PlanetContextProps) {
     setFilterConfig([...filterConfig, filter]);
   };
 
-  // Filtra os dados por comparação
   const applyFilter = useCallback(() => {
-    let filtered = planets;
-    filterConfig.forEach(({ comparison, column, value }) => {
-      filtered = filtered.filter((planet) => {
-        const planetValue = parseFloat(planet[column]);
-        const valueFilter = Number(value);
+    const filteredPlanets = planets.filter((planet) => {
+      return filterConfig.reduce((match, filter) => {
+        if (!match) return false;
+        const planetValue = parseFloat(planet[filter.column]);
+        const valueFilter = Number(filter.value);
 
-        if (comparison === 'maior que') {
+        if (filter.comparison === 'maior que') {
           return planetValue > valueFilter;
         }
-        if (comparison === 'menor que') {
+        if (filter.comparison === 'menor que') {
           return planetValue < valueFilter;
         }
-        if (comparison === 'igual a') {
+        if (filter.comparison === 'igual a') {
           return planetValue === valueFilter;
         }
+
         return true;
-      });
+      }, true);
     });
-    setFilterPlanets(filtered);
+
+    setFilterPlanets(filteredPlanets);
   }, [planets, filterConfig]);
 
-  // Carrega o filtro a cada interação
   useEffect(() => {
     applyFilter();
-  }, [applyFilter, filterConfig]);
+  }, [applyFilter, filterConfig, planets]);
 
   // Carrega os dados da API
   useEffect(() => {
@@ -84,6 +84,7 @@ function PlanetProvider({ children }: PlanetContextProps) {
         handleSearch,
         filterPlanets,
         handleFilterChange,
+        filterConfig,
       } }
     >
       {children}
