@@ -8,34 +8,36 @@ type PlanetContextProps = {
 
 function PlanetProvider({ children }: PlanetContextProps) {
   const [planets, setPlanets] = useState<PlanetType[]>([]);
-  const [search, setSearch] = useState('');
+  const [searchText, setSearchText] = useState('');
   const [filterPlanets, setFilterPlanets] = useState<PlanetType[]>([]);
   const [filterConfig, setFilterConfig] = useState<FilterType[]>([]);
 
-  // Carrega o termo de pesquisa
-  const handleSearch = (term: string) => {
-    setSearch(term);
+  /*
+  // TEXTUAL SEARCH FILTER
+  */
+  const handleSearchText = (term: string) => {
+    setSearchText(term);
   };
 
-  // Filtra de acordo com o termo
   const handleFilterSearch = useCallback(() => {
     const filtered = planets
-      .filter((planet) => planet.name.toLowerCase().includes(search.toLowerCase()));
+      .filter((planet) => planet.name.toLowerCase().includes(searchText.toLowerCase()));
 
     setFilterPlanets(filtered);
-  }, [planets, search]);
+  }, [planets, searchText]);
 
-  // Carrega o filtro a cada interação
   useEffect(() => {
     handleFilterSearch();
   }, [handleFilterSearch]);
 
-  // Carrega os dados da comparação
-  const handleFilterChange = (filter: FilterType) => {
+  /*
+  // NUMERIC SEARCH FILTER
+  */
+  const handleSearchNumeric = (filter: FilterType) => {
     setFilterConfig([...filterConfig, filter]);
   };
 
-  const applyFilter = useCallback(() => {
+  const handleFilterNumeric = useCallback(() => {
     const filteredPlanets = planets.filter((planet) => {
       return filterConfig.reduce((match, filter) => {
         if (!match) return false;
@@ -60,18 +62,34 @@ function PlanetProvider({ children }: PlanetContextProps) {
   }, [planets, filterConfig]);
 
   useEffect(() => {
-    applyFilter();
-  }, [applyFilter, filterConfig, planets]);
+    handleFilterNumeric();
+  }, [handleFilterNumeric, filterConfig, planets]);
 
-  // Carrega os dados da API
+  /*
+  // REMOVE FILTER
+  */
+  const removeFilter = (filterToRemove: FilterType) => {
+    const updatedFilters = filterConfig
+      .filter((filter) => filter !== filterToRemove);
+    setFilterConfig(updatedFilters);
+  };
+
+  const removeAllFilters = () => {
+    setFilterConfig([]);
+  };
+
+  /*
+  // CONNECT API
+  */
   useEffect(() => {
     async function fetchApi() {
-      const urlAPI = 'https://swapi.dev/api/planets';
-
-      const response = await fetch(urlAPI);
-      const data = await response.json();
-
-      setPlanets(data.results);
+      try {
+        const response = await fetch('https://swapi.dev/api/planets');
+        const data = await response.json();
+        setPlanets(data.results);
+      } catch (error) {
+        console.error('Error fetching data!', error);
+      }
     }
     fetchApi();
   }, []);
@@ -80,11 +98,13 @@ function PlanetProvider({ children }: PlanetContextProps) {
     <PlanetContext.Provider
       value={ {
         planets,
-        search,
-        handleSearch,
+        searchText,
+        handleSearchText,
         filterPlanets,
-        handleFilterChange,
+        handleSearchNumeric,
         filterConfig,
+        removeFilter,
+        removeAllFilters,
       } }
     >
       {children}

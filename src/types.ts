@@ -20,3 +20,14 @@ export type FilterType = {
   comparison: string,
   value: number,
 };
+
+export type PlanetContextType = {
+  searchText: string,
+  planets: PlanetType[],
+  filterPlanets: PlanetType[],
+  filterConfig: FilterType[];
+  handleSearchText: (term: string) => void;
+  handleSearchNumeric: (filter: FilterType) => void;
+  removeFilter: (filter: FilterType) => void;
+  removeAllFilters: () => void;
+};
