@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { vi } from 'vitest';
 import mock from './mock';
-import Provider from '../context/planet-provider';
+import Provider from '../context/PlanetProvider';
 import FilterForm from '../components/FilterForm/FilterForm';
 import SearchForm from '../components/SearchForm/SearchForm';
 import Table from '../components/Table/Table';

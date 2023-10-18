@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
-import { PlanetContext } from './planet-context';
-import { FilterType, PlanetType } from '../types';
+import { PlanetContext } from './PlanetContext';
+import { FilterType, PlanetType } from '../types/types';
 
 type PlanetContextProps = {
   children: React.ReactNode;

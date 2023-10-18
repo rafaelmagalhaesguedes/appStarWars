@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { PlanetContext } from '../../context/planet-context';
+import { PlanetContext } from '../../context/PlanetContext';
 
 function SearchForm() {
   const { handleSearchText } = useContext(PlanetContext);
