@@ -5,7 +5,6 @@ import Provider from '../context/planet-provider';
 import FilterForm from '../components/FilterForm/FilterForm';
 import SearchForm from '../components/SearchForm/SearchForm';
 import Table from '../components/Table/Table';
-import App from '../App';
 
 describe('Tests component SearchForm', () => {  
 
@@ -23,6 +22,46 @@ describe('Tests component SearchForm', () => {
 });
 
 describe('Tests component FilterForm', () => {
+  test('Verifica se o form renderiza com os valores iniciais corretos', () => {
+    render(
+      <Provider>
+        <FilterForm />
+      </Provider>
+    );
+    expect(screen.getByTestId('column-filter')).toHaveValue('population');
+    expect(screen.getByTestId('comparison-filter')).toHaveValue('maior que');
+    expect(screen.getByTestId('value-filter')).toHaveValue(0);
+  });
+
+  test('Verifica se renderiza o botão Filtrar e Remover', () => {
+    render(
+      <Provider>
+        <FilterForm />
+      </Provider>
+    );
+    const filterButton = screen.getByRole('button', { name: 'Filtrar' });
+    const removeButton = screen.getByRole('button', { name: 'Remover Filter' });
+    expect(filterButton).toBeInTheDocument();
+    expect(removeButton).toBeInTheDocument();
+  });
+
+  test('Verifica se atualiza os dados do formulário', () => {
+    render(
+      <Provider>
+        <FilterForm />
+      </Provider>
+    );
+    
+    fireEvent.change(screen.getByTestId('column-filter'), { target: { value: 'orbital_period' } });
+    expect(screen.getByTestId('column-filter')).toHaveValue('orbital_period');
+
+    fireEvent.change(screen.getByTestId('comparison-filter'), { target: { value: 'menor que' } });
+    expect(screen.getByTestId('comparison-filter')).toHaveValue('menor que');
+
+    fireEvent.change(screen.getByTestId('value-filter'), { target: { value: '100' } });
+    expect(screen.getByTestId('value-filter')).toHaveValue(100);
+  });
+
   test('Verifica se os campos do formulário podem ser preenchidos e enviados corretamente', () => {
     render(
       <Provider>
@@ -81,46 +120,6 @@ describe('Tests component FilterForm', () => {
 
     const removedFilters = screen.queryAllByTestId('filter');
     expect(removedFilters.length).toBe(0);
-  });
-  
-  test('Verifica se o form renderiza com os valores iniciais corretos', () => {
-    render(
-      <Provider>
-        <FilterForm />
-      </Provider>
-    );
-    expect(screen.getByTestId('column-filter')).toHaveValue('population');
-    expect(screen.getByTestId('comparison-filter')).toHaveValue('maior que');
-    expect(screen.getByTestId('value-filter')).toHaveValue(0);
-  });
-
-  test('Verifica se renderiza o botão Filtrar e Remover', () => {
-    render(
-      <Provider>
-        <FilterForm />
-      </Provider>
-    );
-    const filterButton = screen.getByRole('button', { name: 'Filtrar' });
-    const removeButton = screen.getByRole('button', { name: 'Remover Filter' });
-    expect(filterButton).toBeInTheDocument();
-    expect(removeButton).toBeInTheDocument();
-  });
-
-  test('Verifica se atualiza os dados do formulário', () => {
-    render(
-      <Provider>
-        <FilterForm />
-      </Provider>
-    );
-    
-    fireEvent.change(screen.getByTestId('column-filter'), { target: { value: 'orbital_period' } });
-    expect(screen.getByTestId('column-filter')).toHaveValue('orbital_period');
-
-    fireEvent.change(screen.getByTestId('comparison-filter'), { target: { value: 'menor que' } });
-    expect(screen.getByTestId('comparison-filter')).toHaveValue('menor que');
-
-    fireEvent.change(screen.getByTestId('value-filter'), { target: { value: '100' } });
-    expect(screen.getByTestId('value-filter')).toHaveValue(100);
   });
 });
 
