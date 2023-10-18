@@ -6,14 +6,13 @@ import FilterForm from '../components/FilterForm/FilterForm';
 import SearchForm from '../components/SearchForm/SearchForm';
 import Table from '../components/Table/Table';
 
+const mockFetching = {
+  json: async () => mock,
+} as Response;
+
+const mockFetch = vi.spyOn(global, 'fetch').mockResolvedValue(mockFetching)
+
 describe('Tests component SearchForm', () => {  
-
-  const mockFetching = {
-    json: async () => mock,
-  } as Response;
-
-  const mockFetch = vi.spyOn(global, 'fetch').mockResolvedValue(mockFetching)
-
   test('Verifica se o input de pesquisa é renderizado', () => {
     render(<SearchForm />);
     const textInput = screen.getByTestId('name-filter');
