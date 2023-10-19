@@ -37,7 +37,3 @@ export type PlanetContextType = {
   removeAllFilters: () => void;
   handleOrderColumn: (filterOrder: OrderType) => void;
 };
-
-export type ContextType = {
-  results: PlanetType[];
-};
