@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { PlanetContext } from './PlanetContext';
-import { FilterType, PlanetType } from '../types/types';
+import { FilterType, OrderType, PlanetType } from '../types/types';
 
 type PlanetContextProps = {
   children: React.ReactNode;
@@ -79,6 +79,27 @@ function PlanetProvider({ children }: PlanetContextProps) {
   };
 
   /*
+  // ORDER FILTER
+  */
+  const handleOrderColumn = (filterSort: OrderType) => {
+    const sortedPlanets = [...filterPlanets];
+    const { column, order } = filterSort;
+    sortedPlanets.sort((a, b) => {
+      if (a[column] === 'unknown' && b[column] !== 'unknown') {
+        return 1;
+      }
+      if (a[column] !== 'unknown' && b[column] === 'unknown') {
+        return -1;
+      }
+      if (order === 'ASC') {
+        return parseFloat(a[column]) - parseFloat(b[column]);
+      }
+      return parseFloat(b[column]) - parseFloat(a[column]);
+    });
+    setFilterPlanets(sortedPlanets);
+  };
+
+  /*
   // CONNECT API
   */
   useEffect(() => {
@@ -99,14 +120,13 @@ function PlanetProvider({ children }: PlanetContextProps) {
       value={ {
         planets,
         searchText,
-        handleSearchText,
         filterPlanets,
-        setFilterPlanets,
-        handleSearchNumeric,
         filterConfig,
+        handleSearchText,
+        handleSearchNumeric,
+        handleOrderColumn,
         removeFilter,
         removeAllFilters,
-        setPlanets,
       } }
     >
       {children}

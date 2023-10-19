@@ -28,7 +28,7 @@ function Table() {
       <tbody>
         {isFilterEmpty
           ? planets && planets.map((planet) => (
-            <tr key={ planet.edited } data-testid="planet-name">
+            <tr key={ planet.edited }>
               <td>{planet.name}</td>
               <td>{planet.rotation_period}</td>
               <td>{planet.orbital_period}</td>
@@ -45,8 +45,8 @@ function Table() {
             </tr>
           ))
           : filterPlanets && filterPlanets.map((planet) => (
-            <tr key={ planet.edited } data-testid="planet-name">
-              <td>{planet.name}</td>
+            <tr key={ planet.edited }>
+              <td data-testid="planet-name">{planet.name}</td>
               <td>{planet.rotation_period}</td>
               <td>{planet.orbital_period}</td>
               <td>{planet.diameter}</td>

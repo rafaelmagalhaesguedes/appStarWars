@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { PlanetContext } from '../../context/PlanetContext';
-import { OrderType } from '../../types/types';
+import FilterOrder from '../FilterOrder/FilterOrder';
 
 const columns = [
   'population',
@@ -10,54 +10,25 @@ const columns = [
   'surface_water',
 ];
 
-function FilterForm() {
+function FilterNumeric() {
   const {
     handleSearchNumeric,
     filterConfig,
     removeFilter,
-    removeAllFilters, setFilterPlanets, filterPlanets } = useContext(PlanetContext);
+    removeAllFilters,
+  } = useContext(PlanetContext);
+
   const [filterData, setFilterData] = useState({
     column: 'population',
     comparison: 'maior que',
     value: 0,
   });
-  const [filterSort, setFilterSort] = useState<OrderType>({
-    column: 'population',
-    order: 'DESC',
-  });
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>,
   ) => {
-    e.preventDefault();
     const { id, value } = e.target;
     setFilterData({ ...filterData, [id]: value });
-  };
-
-  const handleChangeSort = (e: any) => {
-    const { id, value, type, name } = e.target;
-    if (type === 'radio') {
-      setFilterSort({ ...filterSort, [name]: id });
-    } else {
-      setFilterSort({ ...filterSort, [name]: value });
-    }
-  };
-
-  const handleSortColumn = () => {
-    const sortedPlanets = [...filterPlanets];
-    sortedPlanets.sort((a, b) => {
-      if (a[filterSort.column] === 'unknown' && b[filterSort.column] !== 'unknown') {
-        return 1;
-      }
-      if (a[filterSort.column] !== 'unknown' && b[filterSort.column] === 'unknown') {
-        return -1;
-      }
-      if (filterSort.order === 'ASC') {
-        return parseFloat(a[filterSort.column]) - parseFloat(b[filterSort.column]);
-      }
-      return parseFloat(b[filterSort.column]) - parseFloat(a[filterSort.column]);
-    });
-    setFilterPlanets(sortedPlanets);
   };
 
   const handleFilter = () => {
@@ -118,53 +89,7 @@ function FilterForm() {
         <button data-testid="button-filter" onClick={ handleFilter }>
           Filtrar
         </button>
-
-        {/*
-          FILTRO PARA ORDENAR
-        */}
-        <label htmlFor="sort">Ordenar</label>
-        <select
-          data-testid="column-sort"
-          name="column"
-          id="column-sort"
-          value={ filterSort.column }
-          onChange={ handleChangeSort }
-        >
-          {columns && columns.map((column) => (
-            <option key={ column }>
-              {column}
-            </option>
-          ))}
-        </select>
-
-        <label htmlFor="asc">Ascendente</label>
-        <input
-          data-testid="column-sort-input-asc"
-          type="radio"
-          name="order"
-          id="ASC"
-          onChange={ handleChangeSort }
-        />
-
-        <label htmlFor="desc">Descendente</label>
-        <input
-          data-testid="column-sort-input-desc"
-          type="radio"
-          name="order"
-          id="DESC"
-          onChange={ handleChangeSort }
-        />
-
-        <button
-          data-testid="column-sort-button"
-          onClick={ () => handleSortColumn() }
-        >
-          Ordenar
-        </button>
-
-        {/*
-          REMOVER FILTERS
-        */}
+        <FilterOrder />
         <button
           data-testid="button-remove-filters"
           onClick={ removeAllFilters }
@@ -194,4 +119,4 @@ function FilterForm() {
   );
 }
 
-export default FilterForm;
+export default FilterNumeric;

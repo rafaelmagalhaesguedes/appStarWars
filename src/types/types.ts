@@ -35,6 +35,9 @@ export type PlanetContextType = {
   handleSearchNumeric: (filter: FilterType) => void;
   removeFilter: (filter: FilterType) => void;
   removeAllFilters: () => void;
-  setPlanets: any;
-  setFilterPlanets: any;
+  handleOrderColumn: (filterOrder: OrderType) => void;
+};
+
+export type ContextType = {
+  results: PlanetType[];
 };

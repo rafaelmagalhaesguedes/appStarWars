@@ -1,5 +1,5 @@
-import FilterForm from './components/FilterForm/FilterForm';
-import SearchForm from './components/SearchForm/SearchForm';
+import FilterForm from './components/FilterNumeric/FilterNumeric';
+import SearchForm from './components/FilterText/FilterText';
 import Table from './components/Table/Table';
 
 function App() {
