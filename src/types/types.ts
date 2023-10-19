@@ -21,6 +21,11 @@ export type FilterType = {
   value: number,
 };
 
+export type OrderType = {
+  column: string;
+  order: 'ASC' | 'DESC'
+};
+
 export type PlanetContextType = {
   searchText: string,
   planets: PlanetType[],
@@ -30,4 +35,6 @@ export type PlanetContextType = {
   handleSearchNumeric: (filter: FilterType) => void;
   removeFilter: (filter: FilterType) => void;
   removeAllFilters: () => void;
+  setPlanets: any;
+  setFilterPlanets: any;
 };

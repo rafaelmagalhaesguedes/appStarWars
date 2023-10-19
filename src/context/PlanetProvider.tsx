@@ -101,10 +101,12 @@ function PlanetProvider({ children }: PlanetContextProps) {
         searchText,
         handleSearchText,
         filterPlanets,
+        setFilterPlanets,
         handleSearchNumeric,
         filterConfig,
         removeFilter,
         removeAllFilters,
+        setPlanets,
       } }
     >
       {children}
