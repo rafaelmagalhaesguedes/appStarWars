@@ -6,14 +6,17 @@ import Table from '../components/Table/Table';
 import App from '../App';
 import { vi } from 'vitest';
 import mock from './mock';
-
-const mockFetching = {
-  json: async () => mock,
-} as Response;
-
-const mockFetch = vi.spyOn(global, 'fetch').mockResolvedValue(mockFetching);
+import FilterText from '../components/FilterText/FilterText';
+import FilterOrder from '../components/FilterOrder/FilterOrder';
 
 describe('Tests component Table', () => {
+
+  const mockFetching = {
+    json: async () => mock,
+  } as Response;
+
+  const mockFetch = vi.spyOn(global, 'fetch').mockResolvedValue(mockFetching);
+
   test('Verifica conexão e renderização da tabela', async () => {
     render(
       <Provider>
@@ -43,15 +46,25 @@ describe('Tests component Table', () => {
 });
 
 describe('Tests component FilterText', () => {
-  test('Verifica se o input é renderizado corretamente', () => {
+  test('Verifica se o filtro de texto renderiza corretamente', () => {
+    render(<FilterText />);
+    const inputElement = screen.getByTestId('name-filter');
+    expect(inputElement).toBeInTheDocument();
+  });
+
+  test('Verifica se o filtro de texto funciona corretamente', async () => {
     render(
       <Provider>
         <App />
       </Provider>
     );
-
     const inputElement = screen.getByTestId('name-filter');
-    expect(inputElement).toBeInTheDocument();
+    fireEvent.change(inputElement, { target: { value: 'Tatooine' } });
+    const filterButton = screen.getByRole('button', { name: 'Filtrar' });
+    await userEvent.click(filterButton);
+
+    const namePlanet = screen.getByText('Tatooine');
+    expect(namePlanet).toBeInTheDocument();
   });
 });
 
@@ -113,7 +126,7 @@ describe('Tests components Filter', () => {
     );
     const buttonRemove = screen.getByTestId('button-remove-filters');
     expect(buttonRemove).toBeInTheDocument();
-    
+
     await userEvent.click(buttonRemove);
     const buttonFilter = screen.getByTestId('button-filter');
     const selectComparison = screen.getByTestId('comparison-filter');
