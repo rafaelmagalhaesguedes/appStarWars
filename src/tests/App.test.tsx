@@ -112,30 +112,25 @@ describe('Tests components Filter', () => {
     </Provider>
     );
     const buttonRemove = screen.getByTestId('button-remove-filters');
-  
     expect(buttonRemove).toBeInTheDocument();
+    
     await userEvent.click(buttonRemove);
-  
     const buttonFilter = screen.getByTestId('button-filter');
     const selectComparison = screen.getByTestId('comparison-filter');
     const selectOrder = screen.getByTestId('column-sort');
-  
-  
+
     await userEvent.selectOptions(selectComparison, 'maior que');
     await userEvent.selectOptions(selectOrder, 'population');
     await userEvent.click(buttonFilter);
-  
     await userEvent.selectOptions(selectComparison, 'menor que');
     await userEvent.click(buttonFilter);
-  
     await userEvent.selectOptions(selectComparison, 'igual a');
     await userEvent.click(buttonFilter);
-  
-    const removeNumericFilter = screen.getAllByRole('button', {name: 'Remover'});
-  
-    await userEvent.click(removeNumericFilter[0]);
-    await userEvent.click(removeNumericFilter[1]);
-    await userEvent.click(removeNumericFilter[2]);
+
+    const removeFilter = screen.getAllByRole('button', {name: 'Remover'});
+    await userEvent.click(removeFilter[0]);
+    await userEvent.click(removeFilter[1]);
+    await userEvent.click(removeFilter[2]);
   });
 });
 
