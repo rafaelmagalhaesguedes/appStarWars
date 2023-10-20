@@ -1,11 +1,14 @@
 import ReactDOM from 'react-dom/client';
-import App from './App';
+import { BrowserRouter } from 'react-router-dom';
 import PlanetProvider from './context/PlanetProvider';
+import App from './App';
 
 ReactDOM
   .createRoot(document.getElementById('root') as HTMLElement)
   .render(
-    <PlanetProvider>
-      <App />
-    </PlanetProvider>,
+    <BrowserRouter>
+      <PlanetProvider>
+        <App />
+      </PlanetProvider>
+    </BrowserRouter>,
   );
