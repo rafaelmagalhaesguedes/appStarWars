@@ -143,5 +143,25 @@ describe('Tests component FilterOrder', () => {
       order: 'DESC',
     });
   });
+
+  test('Verifica se o filtro de ordenação funciona corretamente', async () => {
+    render(
+      <Provider>
+        <App />
+      </Provider>
+    );
+    const selectColumn = screen.getByTestId('column-filter');
+    await userEvent.selectOptions(selectColumn, 'population');
+
+    const inputOrder = screen.getByTestId('column-sort-input-asc')
+    await userEvent.type(inputOrder, 'ASC');
+
+    const buttonOrder = screen.getByTestId('column-sort-button');
+
+    fireEvent.click(buttonOrder);
+
+    const namePlanet = screen.getByText('Yavin IV');
+    expect(namePlanet).toBeInTheDocument();
+  });
 });
 
