@@ -1,13 +1,13 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import FilterNumeric from '../components/FilterNumeric/FilterNumeric';
-import userEvent from '@testing-library/user-event'
+import { PlanetContext } from '../context/PlanetContext';
+import userEvent from '@testing-library/user-event';
 import Provider from '../context/PlanetProvider';
-import Table from '../components/Table/Table';
-import App from '../App';
 import { vi } from 'vitest';
 import mock from './mock';
+import FilterNumeric from '../components/FilterNumeric/FilterNumeric';
 import FilterText from '../components/FilterText/FilterText';
-import FilterOrder from '../components/FilterOrder/FilterOrder';
+import Table from '../components/Table/Table';
+import App from '../App';
 
 describe('Tests component Table', () => {
 
@@ -68,7 +68,7 @@ describe('Tests component FilterText', () => {
   });
 });
 
-describe('Tests components Filter', () => {
+describe('Tests components FilterNumeric', () => {
 
   test('Verifica se o component renderiza corretamente', () => {
     render(
@@ -116,7 +116,30 @@ describe('Tests components Filter', () => {
 
     fireEvent.change(screen.getByTestId('value-filter'), { target: { value: '100' } });
     expect(screen.getByTestId('value-filter')).toHaveValue(100);
-  }); 
+  });
+
+  test('Verifica se o filtro numérico funciona corretamente', async () => {
+    render(
+      <Provider>
+        <App />
+      </Provider>
+    );
+  
+    const columnFilter = screen.getByTestId('column-filter');
+    fireEvent.change(columnFilter, { target: { value: 'population' } });
+  
+    const comparisonFilter = screen.getByTestId('comparison-filter');
+    fireEvent.change(comparisonFilter, { target: { value: 'igual a' } });
+  
+    const valueFilter = screen.getByTestId('value-filter');
+    fireEvent.change(valueFilter, { target: { value: 1000 } });
+  
+    const filterButton = screen.getByRole('button', { name: 'Filtrar' });
+    await userEvent.click(filterButton);
+
+    const namePlanet = screen.getByText('Yavin IV');
+    expect(namePlanet).toBeInTheDocument();
+  });
 
   test('Verifica se a remoção de filtros funciona corretamente', async () => {
     render(
@@ -144,6 +167,25 @@ describe('Tests components Filter', () => {
     await userEvent.click(removeFilter[0]);
     await userEvent.click(removeFilter[1]);
     await userEvent.click(removeFilter[2]);
+  });
+
+  test('Verifica se clicar no botão "Order" chama handleOrderColumn com a ordem correta', () => {
+    const handleOrderColumn = vi.fn();
+
+    render(
+      <PlanetContext.Provider value={{ handleOrderColumn }}>
+        <FilterNumeric />
+      </PlanetContext.Provider>
+    );
+
+    const columnSortButton = screen.getByTestId('column-sort-button');
+
+    fireEvent.click(columnSortButton);
+
+    expect(handleOrderColumn).toHaveBeenCalledWith({
+      column: 'population',
+      order: 'DESC',
+    });
   });
 });
 
