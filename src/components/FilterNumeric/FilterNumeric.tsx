@@ -35,9 +35,12 @@ function FilterNumeric() {
     handleSearchNumeric(filterData);
   };
 
-  const filterColumns = columns
-    .filter((column) => !filterConfig
-      .some((filter) => filter.column === column));
+  const filterColumns = columns.filter((column) => {
+    if (filterConfig) {
+      return !filterConfig.some((filter) => filter.column === column);
+    }
+    return true;
+  });
 
   useEffect(() => {
     setFilterData({
