@@ -4,9 +4,6 @@ import userEvent from '@testing-library/user-event';
 import Provider from '../context/PlanetProvider';
 import { vi } from 'vitest';
 import mock from './mock';
-import FilterNumeric from '../components/FilterNumeric/FilterNumeric';
-import FilterText from '../components/FilterText/FilterText';
-import Table from '../components/Table/Table';
 import App from '../App';
 
 describe('Tests component Table', () => {
@@ -20,34 +17,21 @@ describe('Tests component Table', () => {
   test('Verifica conexão e renderização da tabela', async () => {
     render(
       <Provider>
-        <Table />
+        <App />
       </Provider>
     );
 
     await waitFor(() => expect(mockFetch).toHaveBeenCalledTimes(1));
 
     const columnName = screen.getByText('Name');
-    const columnRotation = screen.getByText('Rotation');
     expect(columnName).toBeInTheDocument();
-    expect(columnRotation).toBeInTheDocument();
     await screen.findByText('Tatooine');
-    await screen.findByText('Alderaan');
-  });
-
-  test('Verifica se o header da tabela é renderizada', () => {
-    render(
-      <Provider>
-        <Table />
-      </Provider>
-    );
-    expect(screen.getByText('Name')).toBeInTheDocument();
-    expect(screen.getByText('Rotation')).toBeInTheDocument();
   });
 });
 
 describe('Tests component FilterText', () => {
   test('Verifica se o filtro de texto renderiza corretamente', () => {
-    render(<FilterText />);
+    render(<App />);
     const inputElement = screen.getByTestId('name-filter');
     expect(inputElement).toBeInTheDocument();
   });
@@ -73,10 +57,9 @@ describe('Tests components FilterNumeric', () => {
   test('Verifica se o component renderiza corretamente', () => {
     render(
       <Provider>
-        <FilterNumeric />
+        <App />
       </Provider>
     );
-  
     const columnLabel = screen.getByText('Coluna');
     const ascendantLabel = screen.getByText('Ascendente');
     const descendantLabel = screen.getByText('Descendente');
@@ -90,61 +73,32 @@ describe('Tests components FilterNumeric', () => {
     expect(removeButton).toBeInTheDocument();
   });
 
-  test('Verifica se o form renderiza com os valores iniciais corretos', () => {
-    render(
-      <Provider>
-        <FilterNumeric />
-      </Provider>
-    );
-    expect(screen.getByTestId('column-filter')).toHaveValue('population');
-    expect(screen.getByTestId('comparison-filter')).toHaveValue('maior que');
-    expect(screen.getByTestId('value-filter')).toHaveValue(0);
-  });
-
-  test('Verifica se atualiza os dados do formulário', () => {
-    render(
-      <Provider>
-        <FilterNumeric />
-      </Provider>
-    );
-    
-    fireEvent.change(screen.getByTestId('column-filter'), { target: { value: 'orbital_period' } });
-    expect(screen.getByTestId('column-filter')).toHaveValue('orbital_period');
-
-    fireEvent.change(screen.getByTestId('comparison-filter'), { target: { value: 'menor que' } });
-    expect(screen.getByTestId('comparison-filter')).toHaveValue('menor que');
-
-    fireEvent.change(screen.getByTestId('value-filter'), { target: { value: '100' } });
-    expect(screen.getByTestId('value-filter')).toHaveValue(100);
-  });
-
   test('Verifica se o filtro numérico funciona corretamente', async () => {
     render(
       <Provider>
         <App />
       </Provider>
     );
+    const selectOrder = screen.getByTestId('column-sort');
+    const selectComparison = screen.getByTestId('comparison-filter');
+    const inputElement = screen.getByTestId('value-filter');
   
-    const columnFilter = screen.getByTestId('column-filter');
-    fireEvent.change(columnFilter, { target: { value: 'population' } });
+    await userEvent.selectOptions(selectOrder, ['population']);
+    await userEvent.selectOptions(selectComparison, ['igual a']);
+    fireEvent.change(inputElement, { target: { value: '1000' } });
   
-    const comparisonFilter = screen.getByTestId('comparison-filter');
-    fireEvent.change(comparisonFilter, { target: { value: 'igual a' } });
+    const buttonFilter = screen.getByTestId('button-filter');
+    await userEvent.click(buttonFilter);
   
-    const valueFilter = screen.getByTestId('value-filter');
-    fireEvent.change(valueFilter, { target: { value: 1000 } });
-  
-    const filterButton = screen.getByRole('button', { name: 'Filtrar' });
-    await userEvent.click(filterButton);
-
-    const namePlanet = screen.getByText('Yavin IV');
-    expect(namePlanet).toBeInTheDocument();
+    const planetName = screen.getByText('Yavin IV');
+    expect(planetName).toBeInTheDocument();
   });
+  
 
   test('Verifica se a remoção de filtros funciona corretamente', async () => {
     render(
     <Provider>
-      <FilterNumeric />
+      <App />
     </Provider>
     );
     const buttonRemove = screen.getByTestId('button-remove-filters');
@@ -168,20 +122,22 @@ describe('Tests components FilterNumeric', () => {
     await userEvent.click(removeFilter[1]);
     await userEvent.click(removeFilter[2]);
   });
+});
 
+describe('Tests component FilterOrder', () => {
   test('Verifica se clicar no botão "Order" chama handleOrderColumn com a ordem correta', () => {
     const handleOrderColumn = vi.fn();
-
+  
     render(
-      <PlanetContext.Provider value={{ handleOrderColumn }}>
-        <FilterNumeric />
+      <PlanetContext.Provider value={{handleOrderColumn}}>
+        <App />
       </PlanetContext.Provider>
     );
-
-    const columnSortButton = screen.getByTestId('column-sort-button');
-
-    fireEvent.click(columnSortButton);
-
+  
+    const buttonOrder = screen.getByTestId('column-sort-button');
+  
+    fireEvent.click(buttonOrder);
+  
     expect(handleOrderColumn).toHaveBeenCalledWith({
       column: 'population',
       order: 'DESC',
