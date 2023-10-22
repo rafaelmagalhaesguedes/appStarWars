@@ -5,6 +5,7 @@ export const LoginContainer = styled.div`
   width: 100vw;
   height: 100vh;
 
+  background-color: #0D5140;
   background-image: url(${bgLogin});
   background-position: center;
   background-repeat: no-repeat;
