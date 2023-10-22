@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { PlanetContext } from '../../context/PlanetContext';
+import { TableBody, TableHeader } from './Styles';
 
 function Table() {
   const { planets, filterPlanets } = useContext(PlanetContext);
@@ -8,7 +9,7 @@ function Table() {
 
   return (
     <table>
-      <thead>
+      <TableHeader>
         <tr>
           <th>Name</th>
           <th>Rotation</th>
@@ -24,8 +25,8 @@ function Table() {
           <th>Edited</th>
           <th>URL</th>
         </tr>
-      </thead>
-      <tbody>
+      </TableHeader>
+      <TableBody>
         {isFilterEmpty
           ? planets && planets.map((planet) => (
             <tr key={ planet.edited }>
@@ -38,7 +39,7 @@ function Table() {
               <td>{planet.terrain}</td>
               <td>{planet.surface_water}</td>
               <td>{planet.population}</td>
-              <td>{planet.films}</td>
+              <td>{planet.films.join(' ')}</td>
               <td>{planet.created}</td>
               <td>{planet.edited}</td>
               <td>{planet.url}</td>
@@ -55,13 +56,13 @@ function Table() {
               <td>{planet.terrain}</td>
               <td>{planet.surface_water}</td>
               <td>{planet.population}</td>
-              <td>{planet.films}</td>
+              <td>{planet.films.join(' ')}</td>
               <td>{planet.created}</td>
               <td>{planet.edited}</td>
               <td>{planet.url}</td>
             </tr>
           ))}
-      </tbody>
+      </TableBody>
     </table>
   );
 }
