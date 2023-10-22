@@ -1,6 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { PlanetContext } from '../../context/PlanetContext';
 import FilterOrder from '../FilterOrder/FilterOrder';
+import {
+  ButtonFilter,
+  DisplayFilters, FilterContainer, Filters, InputValue, InputsFilter } from './Styles';
 
 const columns = [
   'population',
@@ -51,37 +54,40 @@ function FilterNumeric() {
   }, [filterConfig]);
 
   return (
-    <div className="filter_container">
-      <div className="filters">
-        <label htmlFor="column">Coluna</label>
-        <select
-          data-testid="column-filter"
-          id="column"
-          name="column-comparison"
-          value={ filterData.column }
-          onChange={ handleChange }
-        >
-          {filterColumns.map((column) => (
-            <option key={ column } value={ column }>
-              {column}
-            </option>
-          ))}
-        </select>
+    <FilterContainer>
+      <Filters>
+        <InputsFilter>
+          <label htmlFor="column">Coluna</label>
+          <select
+            data-testid="column-filter"
+            id="column"
+            name="column-comparison"
+            value={ filterData.column }
+            onChange={ handleChange }
+          >
+            {filterColumns.map((column) => (
+              <option key={ column } value={ column }>
+                {column}
+              </option>
+            ))}
+          </select>
+        </InputsFilter>
+        <InputsFilter>
+          <label htmlFor="comparison">Operador</label>
+          <select
+            data-testid="comparison-filter"
+            id="comparison"
+            name="comparison"
+            value={ filterData.comparison }
+            onChange={ handleChange }
+          >
+            <option value="maior que">maior que</option>
+            <option value="menor que">menor que</option>
+            <option value="igual a">igual a</option>
+          </select>
+        </InputsFilter>
 
-        <label htmlFor="comparison">Operador</label>
-        <select
-          data-testid="comparison-filter"
-          id="comparison"
-          name="comparison"
-          value={ filterData.comparison }
-          onChange={ handleChange }
-        >
-          <option value="maior que">maior que</option>
-          <option value="menor que">menor que</option>
-          <option value="igual a">igual a</option>
-        </select>
-
-        <input
+        <InputValue
           data-testid="value-filter"
           type="number"
           id="value"
@@ -89,19 +95,24 @@ function FilterNumeric() {
           value={ filterData.value }
           onChange={ handleChange }
         />
-        <button data-testid="button-filter" onClick={ handleFilter }>
-          Filtrar
-        </button>
-        <FilterOrder />
-        <button
+
+        <ButtonFilter
+          data-testid="button-filter"
+          onClick={ handleFilter }
+        >
+          FILTRAR
+        </ButtonFilter>
+
+        <ButtonFilter
           data-testid="button-remove-filters"
           onClick={ removeAllFilters }
         >
-          Remover Filter
-        </button>
-      </div>
+          REMOVER
+        </ButtonFilter>
+        <FilterOrder />
+      </Filters>
 
-      <div className="display_filters">
+      <DisplayFilters>
         {filterConfig && filterConfig.map((filter) => (
           <div key={ filter.column } data-testid="filter">
             <span><strong>{ filter.column }</strong></span>
@@ -117,8 +128,8 @@ function FilterNumeric() {
             </button>
           </div>
         ))}
-      </div>
-    </div>
+      </DisplayFilters>
+    </FilterContainer>
   );
 }
 
